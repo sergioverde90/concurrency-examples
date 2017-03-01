@@ -2,8 +2,11 @@ package com.sergio.com.sergio.executors;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.*;
-
+import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 /**
  * Created by Sergio on 01/03/2017.
  */
@@ -35,8 +38,8 @@ public class CompletionServiceExample {
         CompletionService<String> completionService = new ExecutorCompletionService<>(
                 Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2));
 
-       images.forEach(Image::download);
-
+        images.forEach(i -> completionService.submit(i::download));
+        
         long start = System.nanoTime();
         images.forEach(i -> {
             try {
