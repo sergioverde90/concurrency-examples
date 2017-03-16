@@ -1,7 +1,8 @@
 package com.sergio.executors;
 
 import java.util.UUID;
-import java.util.concurrent.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * This class shows how we can use interruption for cancellation.
