@@ -34,9 +34,9 @@ public class InterruptionExample {
                     System.out.println("in catch, is interrupted? -> " + isInterrupted());
                     // preserve interruption status
                     // FIXME: when I call isInterrupted() often returns false and never finish
-                    // FIXME: why????
+                    // FIXME: why isInterrupted() returns false?????
                     // FIXME: based on: Concurrency In Practice Listing 7.5
-                    // Thread.currentThread().interrupt();
+                    Thread.currentThread().interrupt();
                 }
             }
         }
@@ -50,8 +50,6 @@ public class InterruptionExample {
          * getId(); // this thread id
          */
         private void cancel(){
-            interrupt();
-            interrupt();
             interrupt();
             System.out.println("in cancel, is interrupted? -> " + isInterrupted());
         }
