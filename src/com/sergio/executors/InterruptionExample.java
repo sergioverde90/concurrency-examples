@@ -17,24 +17,25 @@ public class InterruptionExample {
 
         /**
          * This method will be called by MyTasker thread, that is:
+         *
          * <ul>
          *  <li> Thread.currentThread().getId(); <i>// this thread id</i></li>
          *  <li> getId(); <i>// this thread id</i></li>
          * </ul>
+         *
+         * BlockingQueue will be interrupted when this thread is interrupted in cancel method
          */
         @Override
         public void run() {
-            System.out.println("------------------------------");
-            System.out.println("run method thread information:");
-            System.out.println("current thread -> "+Thread.currentThread().getId()); // caller thread id (main thread)
-            System.out.println("this.getId() -> " + this.getId()); // MyTasker thread id
-            System.out.println("------------------------------");
             while(!Thread.currentThread().isInterrupted()){
                 try {
                     bq.put(generateUUID());
                 } catch (InterruptedException e) {
-                    System.out.println("interrupted catch!");
+                    System.out.println("in catch, is interrupted? -> " + isInterrupted());
                     // preserve interruption status
+                    // FIXME: when I call isInterrupted() often returns false and never finish
+                    // FIXME: why????
+                    // FIXME: based on: Concurrency In Practice Listing 7.5
                     // Thread.currentThread().interrupt();
                 }
             }
@@ -49,16 +50,17 @@ public class InterruptionExample {
          * getId(); // this thread id
          */
         private void cancel(){
-            System.out.println(Thread.currentThread().getId()); // caller thread id (main thread)
-            System.out.println(this.getId()); // MyTasker thread id
             interrupt();
+            interrupt();
+            interrupt();
+            System.out.println("in cancel, is interrupted? -> " + isInterrupted());
         }
     }
 
     public static void main(String[] args) {
         MyTasker t = new MyTasker(new LinkedBlockingQueue<String>());
         t.start();
-        // cancel will be called after 1,5 seg
+        // timeout after 1,5 seg
         try {Thread.sleep(1500L);} catch (InterruptedException e) {}
         t.cancel();
     }
