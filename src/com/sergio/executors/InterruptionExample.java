@@ -4,7 +4,9 @@ import java.util.UUID;
 import java.util.concurrent.*;
 
 /**
- * Created by Sergio on 14/03/2017.
+ * This class shows how we can use interruption for cancellation.
+ *
+ * <b>Based on the example Listening 7.5 Concurrency In Practice</b>
  */
 public class InterruptionExample {
 
@@ -15,44 +17,30 @@ public class InterruptionExample {
             this.bq = bq;
         }
 
-        /**
-         * This method will be called by MyTasker thread, that is:
-         *
-         * <ul>
-         *  <li> Thread.currentThread().getId(); <i>// this thread id</i></li>
-         *  <li> getId(); <i>// this thread id</i></li>
-         * </ul>
-         *
-         * BlockingQueue will be interrupted when this thread is interrupted in cancel method
-         */
         @Override
         public void run() {
-            while(!Thread.currentThread().isInterrupted()){
-                try {
-                    bq.put(generateUUID());
-                } catch (InterruptedException e) {
-                    System.out.println("in catch, is interrupted? -> " + isInterrupted());
-                    // preserve interruption status
-                    // FIXME: when I call isInterrupted() often returns false and never finish
-                    // FIXME: why isInterrupted() returns false?????
-                    // FIXME: based on: Concurrency In Practice Listing 7.5
-                    Thread.currentThread().interrupt();
+            try {
+                while(!Thread.currentThread().isInterrupted()) { // check Thread.currentThread.isInterrupted()
+                    bq.put(generateUUID()); // this method check Thread.currentThread.isInterrupted() too
                 }
+            } catch (InterruptedException e) {
+                System.out.println("in catch, is interrupted? -> " + isInterrupted());
             }
         }
 
+        /**
+         * helper method
+         *
+         * @return generated UUID
+         */
         private String generateUUID(){return UUID.randomUUID().toString();}
 
         /**
-         * This method is called by the main thread (or current thread),
-         * that is:
-         * Thread.currentThread().getId(); // caller thread id
-         * getId(); // this thread id
+         * cancel current task.
          */
         private void cancel(){
+            // blocking libraries like BlockingQueue can be disrupted interrupting the thread which run.
             interrupt(); // this interruption shoot InterruptedException in BlockingQueue#put
-            // Is BlockingQueue#put (Thread.interrupt()) recovering interruption status??
-            System.out.println("in cancel, is interrupted? -> " + isInterrupted());
         }
     }
 
