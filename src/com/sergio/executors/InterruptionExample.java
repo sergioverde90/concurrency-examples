@@ -50,7 +50,8 @@ public class InterruptionExample {
          * getId(); // this thread id
          */
         private void cancel(){
-            interrupt();
+            interrupt(); // this interruption shoot InterruptedException in BlockingQueue#put
+            // Is BlockingQueue#put (Thread.interrupt()) recovering interruption status??
             System.out.println("in cancel, is interrupted? -> " + isInterrupted());
         }
     }
