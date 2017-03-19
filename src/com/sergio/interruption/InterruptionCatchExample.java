@@ -7,11 +7,19 @@ package com.sergio.interruption;
  * There are two options for handle {@link InterruptedException}:
  * <ul>
  *     <li>Propagate {@link InterruptedException} if it is possible, making your method
- *     interruptible too</li>
+ *      interruptible too</li>
  *     <li>
  *         Restore the interruption status calling {@code Thread.currentThread().interrupt()}
  *     </li>
  * </ul>
+ *
+ * <p>
+ *     <h3>References:</h3>
+ *     <ul>
+ *         <li>Concurrency in Practice 7.1.3 Responding to interruptio</li>
+ *         <li><a href="http://www.javaspecialists.eu/archive/Issue056.html">InterruptionException JavaSpecialist</a></li>
+ *     </ul>
+ * </p>
  */
 public class InterruptionCatchExample {
     private static class InterruptionIssue extends Thread {
