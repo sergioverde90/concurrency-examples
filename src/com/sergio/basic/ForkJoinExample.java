@@ -1,4 +1,4 @@
-package com.sergio.concurrency;
+package com.sergio.basic;
 
 import java.util.Arrays;
 import java.util.List;
